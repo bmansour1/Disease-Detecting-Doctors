@@ -8,11 +8,12 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "concurrently \"cd ../backend && venv\\Scripts\\activate && flask run\" \"vite\""
+    "start": "concurrently \"cd ../backend && source venv/bin/activate && flask run\" \"vite\""
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.11.0",
     "axios": "^1.7.7",
+    "concurrency": "^0.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -29,4 +30,4 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0"
   }
-  }
+}
