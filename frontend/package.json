@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "concurrently \"cd ../backend && venv\\Scripts\\activate && flask run\" \"vite\""
+    "start": "concurrently \"cd ../backend && source venv/bin/activate && flask run\" \"vite\""
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.11.0",
