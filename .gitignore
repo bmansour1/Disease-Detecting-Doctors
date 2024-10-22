@@ -5,3 +5,4 @@
 *.env
 frontend/node_modules/
 .env.local
+backend/venv

@@ -1,15 +1,16 @@
+// src/App.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import HealthForm from './InputForm';  // Import the new HealthForm component
 
 // Define a type for the response object
 type ServerResponse = {
   age: string;
-  height: string;
+  heightFeet: string;
+  heightInches: string;
   weight: string;
-  bloodPressure: string;
-  allergies: string;
-  message: string;
+  symptoms: string;
 };
 
 export default function App() {
@@ -21,42 +22,27 @@ export default function App() {
   // Manage whether the form should be shown or not
   const [showForm, setShowForm] = useState(false);
 
-  const [formData, setFormData] = useState({
-    age: '',
-    height: '',
-    weight: '',
-    bloodPressure: '',
-    allergies: ''
-  });
-
   useEffect(() => {
     axios.get('http://localhost:5000/')
       .then(response => setBackendData(response.data.message))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    axios.post('http://localhost:5000/submit', formData)
-      .then(res => setResponse(res.data))  // Set the response as the server's JSON response
-      .catch(err => console.error('Error submitting form:', err));
+  const handleFormSubmitSuccess = (data: ServerResponse) => {
+    setResponse(data);  // Save the server's response after form submission
+    setShowForm(false); // Optionally, hide the form after successful submission
   };
 
   return (
     <div>
       <header>
+
         <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
           <UserButton />
+          
           <h1>{backendData}</h1>
 
           {/* Button to show the form */}
@@ -70,82 +56,21 @@ export default function App() {
 
           {/* Health Information Form - Render only if showForm is true */}
           {showForm && (
-            <div style={{ margin: '50px' }}>
-              <h2>Health Information Form</h2>
+            <HealthForm
+              onSubmitSuccess={handleFormSubmitSuccess}
+              onBack={() => setShowForm(false)}
+            />
+          )}
 
-              {/* Back button */}
-              <button onClick={() => setShowForm(false)}>
-                Back
-              </button>
-
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <label>Age:</label>
-                  <input
-                    type="number"
-                    name="age"
-                    value={formData.age}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label>Height (in cm):</label>
-                  <input
-                    type="number"
-                    name="height"
-                    value={formData.height}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label>Weight (in kg):</label>
-                  <input
-                    type="number"
-                    name="weight"
-                    value={formData.weight}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div>
-                  <label>Blood Pressure:</label>
-                  <input
-                    type="text"
-                    name="bloodPressure"
-                    value={formData.bloodPressure}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div>
-                  <label>Allergies:</label>
-                  <input
-                    type="text"
-                    name="allergies"
-                    value={formData.allergies}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <button type="submit">Submit</button>
-              </form>
-
-              {/* Display the server response */}
-              {response && (
-                <div style={{ marginTop: '20px' }}>
-                  <h3>Response from Server:</h3>
-                  <p>Age: {response.age}</p>
-                  <p>Height: {response.height}</p>
-                  <p>Weight: {response.weight}</p>
-                  <p>Blood Pressure: {response.bloodPressure}</p>
-                  <p>Allergies: {response.allergies}</p>
-                  <p>{response.message}</p>
-                </div>
-              )}
+          {/* Display the server response */}
+          {response && (
+            <div style={{ marginTop: '20px' }}>
+              <h3>Response from Server:</h3>
+              <p>Age: {response.age}</p>
+              <p>Height Feet: {response.heightFeet}</p>
+              <p>Height Inches: {response.heightInches}</p>
+              <p>Weight: {response.weight}</p>
+              <p>Symptoms: {response.symptoms}</p>
             </div>
           )}
         </SignedIn>
