@@ -6,7 +6,8 @@ export default function App() {
   const [backendData, setBackendData] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/')
+    //axios.get('http://localhost:5000/')
+    axios.get('http://127.0.0.1:5000/')
       .then(response => setBackendData(response.data.message))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
