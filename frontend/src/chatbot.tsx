@@ -67,25 +67,28 @@ export default function ChatBot() {
     };
 
     return (
-        <div>
-            <h2>Chatbot</h2>
-            <div style={{ minHeight: '200px', border: '1px solid #ccc', padding: '10px', marginBottom: '10px', whiteSpace: 'pre-wrap' }}>
+        <div className="chatbot">
+            <h2 className="chatbot-title"></h2>
+            <div style={{height: '250px', width: '950px', maxWidth: "900px", border: '1px solid #ccc', padding: '10px', marginBottom: '10px', whiteSpace: 'pre-wrap' }}>
                 {messages.map((msg, idx) => (
                     <div key={idx} style={{ textAlign: msg.sender === 'user' ? 'right' : 'left' }}>
                         {msg.text}
                     </div>
                 ))}
             </div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Type your message here..."
-                    value={inputText}
-                    onChange={handleChange}
-                    style={{ marginRight: '5px', width: '80%' }}
-                />
-                <button type="submit" style={{ width: '15%' }}>Send</button>
-            </form>
+            <div className="chatbot-user-text-box">
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Type your message here..."
+                        value={inputText}
+                        onChange={handleChange}
+                        style={{ marginRight: '5px', width: '80%' }}
+                    />
+                    
+                    <button type="submit" style={{ width: '50%' }}>Send</button>
+                </form>
+            </div>
         </div>
     );
 }
