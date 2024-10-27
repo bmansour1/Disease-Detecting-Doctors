@@ -21,7 +21,7 @@ export default function InputForm() {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const url = `http://127.0.0.1:5000/api/user/biometrics/add/${user?.id}`;
+        const url = `http://127.0.0.1:5000/api/user/biometrics/set/${user?.id}`;
 
         try {
             const response = await axios.post(url, biometrics);
