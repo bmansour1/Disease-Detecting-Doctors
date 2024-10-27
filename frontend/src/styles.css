@@ -221,14 +221,15 @@ button:hover {
     margin-right: 0;            /* Remove right margin on last field */
 }
 
-.chatbot {
+.chatbot-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     font-family: monospace;
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-width: 1000px; /* Limit the width of the form */
+    max-width: 2000px; /* Limit the width of the form */
     border: 1px solid #ccc;
     padding: 20px; /* Padding inside the container */
     border-radius: 8px;
