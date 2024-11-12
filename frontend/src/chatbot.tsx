@@ -1,18 +1,23 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useUser } from '@clerk/clerk-react';
-import axios from 'axios'
+import './styles.css';
+import axios from 'axios';
+
 
 interface Message {
     sender: 'user' | 'AI';
     text: string;
 }
 
-export default function ChatBot() {
+interface ChatBotProps {
+    onBack: () => void; // Function prop to handle going back to the main page
+}
+
+export default function ChatBot({ onBack }: ChatBotProps) {
     const [inputText, setInputText] = useState<string>('');
     const [messages, setMessages] = useState<Message[]>([]);
     const { user } = useUser();
 
-    // Helper Method for streaming - updates the current AI response
     const updateLastMessage = (newText: string) => {
         setMessages(currentMessages => {
             const updatedMessages = [...currentMessages];
@@ -67,10 +72,8 @@ export default function ChatBot() {
                     const { done, value } = await reader.read();
                     if (done) break;
                     partialMessage += new TextDecoder("utf-8").decode(value, { stream: true });
-                    updateLastMessage(partialMessage); // Dynamically updates the last message for streaming effect
+                    updateLastMessage(partialMessage);
                 }
-                // If you don't want to stream, update currentMessages at the end:
-                // setMessages(currentMessages => [...currentMessages, { sender: 'AI', text: completeMessage }]);
             }
         } catch (error) {
             console.error('Error fetching response:', error);
@@ -81,25 +84,41 @@ export default function ChatBot() {
     };
 
     return (
-        <div>
-            <h2>Chatbot</h2>
-            <div style={{ minHeight: '200px', border: '1px solid #ccc', padding: '10px', marginBottom: '10px', whiteSpace: 'pre-wrap' }}>
+        <div className="chatbot-container">
+            {/* Back Button */}
+            <button className="back-button" onClick={onBack}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                >
+                    <path d="M19 12H5.83l5.88-5.88L10.29 5 2.29 12l8 7.29 1.42-1.42L5.83 12H19z" />
+                </svg>
+            </button>
+
+            <h2 className="chatbot-title"></h2>
+            <div style={{ height: '250px', width: '950px', maxWidth: "900px", border: '1px solid #ccc', padding: '10px', marginBottom: '10px', whiteSpace: 'pre-wrap' }}>
                 {messages.map((msg, idx) => (
                     <div key={idx} style={{ textAlign: msg.sender === 'user' ? 'right' : 'left' }}>
                         {msg.text}
                     </div>
                 ))}
             </div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Type your message here..."
-                    value={inputText}
-                    onChange={handleChange}
-                    style={{ marginRight: '5px', width: '80%' }}
-                />
-                <button type="submit" style={{ width: '15%' }}>Send</button>
-            </form>
+            <div className="chatbot-user-text-box">
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Type your message here..."
+                        value={inputText}
+                        onChange={handleChange}
+                        style={{ marginRight: '5px', width: '80%' }}
+                    />
+                    
+                    <button type="submit" style={{ width: '15%' }}>Send</button>
+                </form>
+            </div>
         </div>
     );
 }

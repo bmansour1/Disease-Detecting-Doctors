@@ -1,8 +1,13 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { useUser } from '@clerk/clerk-react';
+import './styles.css';
 
-export default function InputForm() {
+interface InputFormProps {
+    onBack: () => void; // Function prop to handle going back to the main page
+}
+
+export default function InputForm({ onBack }: InputFormProps) {
     const [biometrics, setBiometrics] = useState({
         gender: '',
         race: '',
@@ -15,8 +20,12 @@ export default function InputForm() {
     });
     const { user } = useUser();
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        setBiometrics({ ...biometrics, [e.target.name]: e.target.value });
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setBiometrics(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -32,75 +41,114 @@ export default function InputForm() {
     };
 
     return (
-        <div>
-            <h2>Add/Edit Biometrics</h2>
+        <div className="form-container">
+            <button className="back-button" onClick={onBack}>
+                {/* Back Arrow SVG */}
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                >
+                    <path d="M19 12H5.83l5.88-5.88L10.29 5 2.29 12l8 7.29 1.42-1.42L5.83 12H19z" />
+                </svg>
+            </button>
+            <h2> Add/Edit Biometrics</h2>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="gender">Gender</label>
-                    <input
-                        type="text"
-                        id="gender"
-                        name="gender"
-                        value={biometrics.gender}
-                        onChange={handleChange}
-                        required
-                    />
+                <div className="form-row">
+                <div className="form-field">
+                        <label htmlFor="gender">Gender</label>
+                        <select
+                            id="gender"
+                            name="gender"
+                            value={biometrics.gender}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Transgender">Transgender</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div className="form-field">
+                        <label htmlFor="race">Race</label>
+                        <select
+                            id="race"
+                            name="race"
+                            value={biometrics.race}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Race</option>
+                            <option value="asian">Asian</option>
+                            <option value="black">Black or African American</option>
+                            <option value="hispanic">Hispanic or Latino</option>
+                            <option value="native-american">Native American</option>
+                            <option value="pacific-islander">Native Hawaiian or Other Pacific Islander</option>
+                            <option value="white">White</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="race">Race</label>
-                    <input
-                        type="text"
-                        id="race"
-                        name="race"
-                        value={biometrics.race}
-                        onChange={handleChange}
-                        required
-                    />
+                
+                <div className="form-row">
+                    <div className="form-field">
+                        <label htmlFor="age">Age</label>
+                        <input
+                            type="number"
+                            id="age"
+                            name="age"
+                            value={biometrics.age}
+                            placeholder="Years"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-field">
+                        <label htmlFor="weight">Weight</label>
+                        <input
+                            type="number"
+                            id="weight"
+                            name="weight"
+                            value={biometrics.weight}
+                            placeholder="Pounds"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="age">Age</label>
-                    <input
-                        type="text"
-                        id="age"
-                        name="age"
-                        value={biometrics.age}
-                        onChange={handleChange}
-                        required
-                    />
+                
+                <div className="form-row">
+                    
+                    <div className="form-field">
+                        <label htmlFor="height">Height</label>
+                        <input
+                            type="text"
+                            id="height"
+                            name="height"
+                            value={biometrics.height}
+                            placeholder="Feet, Inches"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div> 
+                    <div className="form-field">
+                        <label htmlFor="bloodPressure">Blood Pressure</label>
+                        <input
+                            type="text"
+                            id="bloodPressure"
+                            name="bloodPressure"
+                            value={biometrics.bloodPressure}
+                            placeholder="Sys/Dia"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="height">Height</label>
-                    <input
-                        type="text"
-                        id="height"
-                        name="height"
-                        value={biometrics.height}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="weight">Weight</label>
-                    <input
-                        type="text"
-                        id="weight"
-                        name="weight"
-                        value={biometrics.weight}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="bloodPressure">Blood Pressure</label>
-                    <input
-                        type="text"
-                        id="bloodPressure"
-                        name="bloodPressure"
-                        value={biometrics.bloodPressure}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
+                
                 <div>
                     <label htmlFor="allergies">Allergies</label>
                     <input
@@ -108,22 +156,24 @@ export default function InputForm() {
                         id="allergies"
                         name="allergies"
                         value={biometrics.allergies}
+                        placeholder="Separate by comma"
                         onChange={handleChange}
                         required
                     />
                 </div>
                 <div>
                     <label htmlFor="symptoms">Symptoms</label>
-                    <input
-                        type="text"
+                    <textarea
                         id="symptoms"
                         name="symptoms"
-                        value={biometrics.symptoms}
                         onChange={handleChange}
+                        value={biometrics.symptoms}
+                        placeholder="Describe your symptoms"
+                        rows={8}
                         required
                     />
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit">Confirm</button>
             </form>
         </div>
     );
