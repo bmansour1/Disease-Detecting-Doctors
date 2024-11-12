@@ -1,6 +1,8 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import './styles.css';
+import axios from 'axios';
+
 
 interface Message {
     sender: 'user' | 'AI';
@@ -41,9 +43,22 @@ export default function ChatBot({ onBack }: ChatBotProps) {
         setMessages(messages => [...messages, newMessage]);
         
         try {
-            const url = `http://127.0.0.1:5000/api/user/chat/create/${user?.id}`;
+            const chatLog = `http://127.0.0.1:5000/api/user/chat/get/${user?.id}`;
+            let url;
+            let method;
+
+            const logResponse = await axios.get(chatLog);
+            const { data } = logResponse;
+            if (data == null) {
+                url = `http://127.0.0.1:5000/api/user/chat/create/${user?.id}`;
+                method = 'POST';
+            } else {
+                url = `http://127.0.0.1:5000/api/user/chat/add/${user?.id}`;
+                method = 'PUT';
+            }
+            
             const response = await fetch(url, {
-                method: 'POST',
+                method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ input: inputText })
             });

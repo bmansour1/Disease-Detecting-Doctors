@@ -16,30 +16,6 @@ CORS(app)  # Allow requests from React frontend
 def index():
     return jsonify({"message": "Welcome to the medical chatbot!"})
 
-# GET, POST, and DELETE methods handling user credentials
-@app.route('/api/user/register', methods=['POST'])
-def register_user():
-    user_credentials = request.get_json()
-    user_id = add_user(user_credentials)
-
-    return jsonify({"user_id": user_id})
-
-@app.route('/api/user/edit/<user_id>', methods=['PUT'])
-def update_user(user_id):
-    updated_credentials = request.get_json()
-    message = edit_user(user_id, updated_credentials)
-    return jsonify({'message': message})
-
-@app.route('/api/user/delete/<user_id>', methods=['DELETE'])
-def remove_user(user_id):
-    message = delete_user(user_id)
-    return jsonify({'message': message})
-
-@app.route('/api/user/get_all', methods=['GET'])
-def get_users():
-    users = get_all_users()
-    return jsonify(users)
-
 # GET, POST, and DELETE methods handling user biometrics
 
 @app.route('/api/user/biometrics/get/<user_id>', methods=['GET'])
@@ -47,16 +23,10 @@ def get_biometrics(user_id):
     result = get_user_biometrics(user_id)
     return jsonify(result)
 
-@app.route('/api/user/biometrics/add/<user_id>', methods=['POST'])
-def add_biometrics(user_id):
+@app.route('/api/user/biometrics/set/<user_id>', methods=['POST'])
+def set_biometrics(user_id):
     user_biometrics = request.get_json()
-    result = add_user_biometrics(user_id, user_biometrics)
-    return jsonify({'message': result})
-
-@app.route('/api/user/biometrics/edit/<user_id>', methods=['PUT'])
-def update_biometrics(user_id):
-    updated_biometrics = request.get_json()
-    result = edit_user_biometrics(user_id, updated_biometrics)
+    result = set_user_biometrics(user_id, user_biometrics)
     return jsonify({'message': result})
 
 @app.route('/api/user/biometrics/delete/<user_id>', methods=['DELETE'])
