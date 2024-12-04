@@ -162,7 +162,7 @@ def get_nearby_doctors():
         return jsonify(response.json())
     else:
         return jsonify({"error": "Failed to fetch data"}), response.status_code
-    
+
 @app.route('/api/user/diagnosis/get/<user_id>', methods=['GET']) 
 def get_diagnostic(user_id):
     date_time = request.get_json()["dateTime"]
