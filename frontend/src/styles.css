@@ -40,6 +40,63 @@ body, html {
     animation: fadeIn 5s ease;
 }
 
+/* Add to styles.css */
+
+/* Container for the coordinates input fields */
+.coordinates-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+  }
+  
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .form-field label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-field input {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .doctor-locator-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .back-button {
+    align-self: flex-start;
+    margin-bottom: 20px;
+  }
+  
+  /* Optional: Adjust the map container responsiveness */
+  @media (max-width: 768px) {
+    .coordinates-input-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .form-field input {
+      width: 100%;
+      max-width: 300px;
+    }
+  
+    .doctor-locator-container {
+      padding: 10px;
+    }
+  }
+  
 
 @keyframes fadeIn {
     from {
