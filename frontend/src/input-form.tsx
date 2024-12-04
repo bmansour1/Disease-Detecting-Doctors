@@ -1,14 +1,24 @@
+// InputForm.tsx
+
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { useUser } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
-interface InputFormProps {
-    onBack: () => void; // Function prop to handle going back to the main page
+interface Biometrics {
+    gender: string;
+    race: string;
+    age: string;
+    height: string;
+    weight: string;
+    bloodPressure: string;
+    allergies: string;
+    symptoms: string;
 }
 
-export default function InputForm({ onBack }: InputFormProps) {
-    const [biometrics, setBiometrics] = useState({
+export default function InputForm() {
+    const [biometrics, setBiometrics] = useState<Biometrics>({
         gender: '',
         race: '',
         age: '',
@@ -19,6 +29,10 @@ export default function InputForm({ onBack }: InputFormProps) {
         symptoms: ''
     });
     const { user } = useUser();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -30,19 +44,36 @@ export default function InputForm({ onBack }: InputFormProps) {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const url = `http://127.0.0.1:5000/api/user/biometrics/set/${user?.id}`;
-
+        setLoading(true);
+        setError(null);
+        setSuccessMessage(null);
         try {
+            const url = `http://127.0.0.1:5000/api/user/biometrics/set/${user?.id}`;
             const response = await axios.post(url, biometrics);
             console.log('Server response:', response.data);
-        } catch (error) {
-            console.error('Error submitting data:', error);
+
+            // Display success message
+            setSuccessMessage(response.data.message);
+            
+            // Optionally, navigate to PastDiagnoses page after a short delay
+            setTimeout(() => {
+                navigate('/past-diagnoses');
+            }, 2000); // 2 seconds delay to show success message
+        } catch (err) {
+            console.error('Error submitting data:', err);
+            setError('Failed to submit biometrics and generate diagnosis. Please try again.');
+        } finally {
+            setLoading(false);
         }
+    };
+
+    const handleBack = () => {
+        navigate('/');
     };
 
     return (
         <div className="form-container">
-            <button className="back-button" onClick={onBack}>
+            <button className="back-button" onClick={handleBack}>
                 {/* Back Arrow SVG */}
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +88,7 @@ export default function InputForm({ onBack }: InputFormProps) {
             <h2> Add/Edit Biometrics</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-row">
-                <div className="form-field">
+                    <div className="form-field">
                         <label htmlFor="gender">Gender</label>
                         <select
                             id="gender"
@@ -93,7 +124,7 @@ export default function InputForm({ onBack }: InputFormProps) {
                         </select>
                     </div>
                 </div>
-                
+
                 <div className="form-row">
                     <div className="form-field">
                         <label htmlFor="age">Age</label>
@@ -120,9 +151,8 @@ export default function InputForm({ onBack }: InputFormProps) {
                         />
                     </div>
                 </div>
-                
+
                 <div className="form-row">
-                    
                     <div className="form-field">
                         <label htmlFor="height">Height</label>
                         <input
@@ -134,7 +164,7 @@ export default function InputForm({ onBack }: InputFormProps) {
                             onChange={handleChange}
                             required
                         />
-                    </div> 
+                    </div>
                     <div className="form-field">
                         <label htmlFor="bloodPressure">Blood Pressure</label>
                         <input
@@ -148,7 +178,7 @@ export default function InputForm({ onBack }: InputFormProps) {
                         />
                     </div>
                 </div>
-                
+
                 <div>
                     <label htmlFor="allergies">Allergies</label>
                     <input
@@ -173,8 +203,12 @@ export default function InputForm({ onBack }: InputFormProps) {
                         required
                     />
                 </div>
-                <button type="submit">Confirm</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Submitting...' : 'Confirm'}
+                </button>
+                {successMessage && <p className="success-message">{successMessage}</p>}
+                {error && <p className="error-message">{error}</p>}
             </form>
         </div>
     );
-}
+    }
