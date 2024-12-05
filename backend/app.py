@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS  # To handle CORS issues
 from openai import OpenAI
 from firebase import *
+from datetime import datetime
 
 load_dotenv() # Load OPEN_API_KEY from .env
 OPEN_API_KEY = os.getenv('OPEN_API_KEY')
@@ -124,6 +125,42 @@ def add_chat(user_id):
 @app.route('/api/user/chat/delete/<user_id>', methods=['DELETE'])
 def remove_user_chat(user_id):
     result = delete_user_chat(user_id)
+    return jsonify({'message': result})
+
+@app.route('/api/user/diagnosis/get/<user_id>', methods=['GET']) 
+def get_diagnostic(user_id):
+    date_time = request.get_json()["dateTime"]
+    result = get_user_diagnosis_list(user_id)[date_time]
+    return jsonify(result)
+
+@app.route('/api/user/diagnosis-list/get/<user_id>', methods=['GET']) 
+def get_diagnostic_list(user_id):
+    result = get_user_diagnosis_list(user_id)
+    return jsonify(result)
+
+@app.route('/api/user/diagnosis/add/<user_id>', methods=['POST'])
+def add_diagnosis(user_id):
+    # Get current datetime and convert to a string
+    date_time = datetime.now()
+    date_time_string = date_time.strftime('%Y-%m-%d %H:%M:%S')
+
+    # Get new user diagnosis and save in datetime: diagnosis JSON format
+    user_diagnosis = request.get_json()
+    diagnosis_object = {
+        date_time_string: user_diagnosis
+    }
+    result = add_user_diagnosis(user_id, diagnosis_object)
+    return jsonify({'message': result})
+
+@app.route('/api/user/diagnosis/delete/<user_id>', methods=['DELETE'])
+def delete_diagnosis(user_id):
+    date_time = request.get_json()["dateTime"]
+    result = delete_user_diagnosis(user_id, date_time)
+    return jsonify({'message': result})
+
+@app.route('/api/user/diagnosis-list/delete/<user_id>', methods=['DELETE'])
+def delete_diagnosis_list(user_id):
+    result = delete_user_diagnosis_list(user_id)
     return jsonify({'message': result})
 
 if __name__ == '__main__':
