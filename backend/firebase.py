@@ -47,8 +47,9 @@ def delete_user_chat(user_id):
 # User Diagnoses
 def get_user_diagnosis_list(user_id):
     diagnosis_ref = db.collection('Diagnoses').document(user_id)
-    diagnosis_doc = diagnosis_ref.get()
-    return diagnosis_doc.to_dict()
+    diagnosis_dict = diagnosis_ref.get().to_dict()
+    diagnosis_list = [{"timestamp": k, **v} for k, v in diagnosis_dict.items()] # Extract dateTime and add it as a parameter; convert from a dict to a list
+    return diagnosis_list
 
 def add_user_diagnosis(user_id, new_diagnosis):
     diagnosis_ref = db.collection('Diagnoses').document(user_id)
@@ -66,4 +67,3 @@ def delete_user_diagnosis_list(user_id):
     diagnosis_ref = db.collection('Diagnoses').document(user_id)
     diagnosis_ref.delete()
     return f"All diagnoses for user with ID {user_id} have been successfully deleted"
-
