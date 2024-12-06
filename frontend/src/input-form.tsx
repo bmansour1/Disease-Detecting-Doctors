@@ -67,13 +67,9 @@ export default function InputForm() {
         }
     };
 
-    const handleBack = () => {
-        navigate('/');
-    };
-
     return (
         <div className="form-container">
-            <button className="back-button" onClick={handleBack}>
+            <button className="back-button" onClick={() => navigate(-1)}>
                 {/* Back Arrow SVG */}
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -1,5 +1,6 @@
 # Ignore .env folder
-venv/
+backend/venv
+backend/key.json
 
 # Ignore .env files
 *.env

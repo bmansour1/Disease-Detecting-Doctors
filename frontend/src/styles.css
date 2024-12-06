@@ -1,3 +1,9 @@
+/* 
+
+---------------------------------------- BASE CSS ----------------------------------------
+
+*/
+
 /* src/styles.css */
 body, html {
     margin: 0;
@@ -14,89 +20,48 @@ body, html {
     flex-direction: column;
     align-items: center;
     /* color: rgb(81, 101, 78); */
-    background-color: #777777;
+    /* background-color: #dbdbdb; */
     background-image: url('./assets/background2.avif'); /* Path to your background image */
     background-size: cover;
-    background-blend-mode: darken;
+    /* background-blend-mode: darken; */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent the image from repeating */
 }
 
-.title {
-    font-family: monospace;
-    font-size: 60pt;
-    text-align: center;
+body::before {
+    content: '';
     position: absolute;
-    padding-top: 10%;
-    padding-left: 10%;
-    margin: auto;
     top: 0;
+    right: 0;
+    bottom: 0;
     left: 0;
-    width:80%;
-    background: transparent;
-    /* z-index: 1000; */
-    /* padding: 10px 20px; Adjust padding as needed */
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-    animation: fadeIn 5s ease;
+    background-image: linear-gradient(to bottom right, #303b3e, #6d6d6d);
+    opacity: 0.2;
+    z-index: -1; /* Ensure overlay is behind content */
 }
 
-/* Add to styles.css */
+/*
 
-/* Container for the coordinates input fields */
-.coordinates-input-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 20px 0;
-  }
-  
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .form-field label {
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .form-field input {
-    padding: 8px;
-    width: 200px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .doctor-locator-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+---------------------------------------- TITLE CSS ----------------------------------------
+
+*/
+
+.title {
+    font-family: monospace;
+    font-size: 40pt;
+    text-align: left;
+    position: fixed;
+    color: rgb(255, 255, 255);
+    top: 0;
+    left: 0;
+    right: 0;
     padding: 20px;
-  }
-  
-  .back-button {
-    align-self: flex-start;
-    margin-bottom: 20px;
-  }
-  
-  /* Optional: Adjust the map container responsiveness */
-  @media (max-width: 768px) {
-    .coordinates-input-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .form-field input {
-      width: 100%;
-      max-width: 300px;
-    }
-  
-    .doctor-locator-container {
-      padding: 10px;
-    }
-  }
-  
+    margin: 0;
+    background: transparent;
+    z-index: 1000;
+    width: 100%;
+    animation: fadeIn 2s ease;
+}
 
 @keyframes fadeIn {
     from {
@@ -107,11 +72,211 @@ body, html {
     }
 }
 
+/* 
+
+---------------------------------------- SIGNIN BUTTON ----------------------------------------
+
+*/
+
+.signin-button {
+    position: absolute; /* Position relative to the nearest positioned ancestor or viewport */
+    top: 20px; /* Distance from the top of the page */
+    right: 20px; /* Distance from the right edge of the page */
+    z-index: 10; /* Ensure it appears above other elements */
+    display: flex; /* Allows easy alignment adjustments if needed */
+    justify-content: center;
+    align-items: center;
+    padding: 10px; /* Optional padding for better spacing */
+}
+
+/* 
+
+---------------------------------------- HOME PAGE ----------------------------------------
+
+*/
+
+.homepage-button {
+    font-family: monospace;
+    margin-top: 20px;
+    padding: 20px 30px;
+    font-size: 2rem;
+    background-color: transparent;
+    color: rgb(212, 211, 211);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    animation: fadeIn 2s ease;
+}
+
+.homepage-button:hover {
+    opacity: 50%;
+}
+
+
+/* 
+
+---------------------------------------- SELECTION PAGE ----------------------------------------
+
+*/
+
+.selection-container {
+    font-family: monospace;
+    display: flex; /* Use Flexbox */
+    flex-wrap: wrap; /* Allow buttons to wrap onto new lines if needed */
+    background: transparent;
+    justify-content: center; /* Center-align buttons */
+    gap: 2rem; /* Use relative spacing for gap */
+    width: 100%; /* Make the container take full width */
+    padding: 20px; /* Add padding for spacing around content */
+    box-sizing: border-box; /* Include padding in width/height calculations */
+}
+
+.selection-text {
+    font-family: monospace; /* Maintain the font style */
+    font-size: 1rem; /* Adjust font size as needed */
+    position: absolute; /* Position relative to the viewport */
+    top: 20px; /* Distance from the top of the page */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for element's width to center precisely */
+    text-align: center; /* Align text inside the element */
+    color: #ffffff; /* Set a suitable text color */
+    z-index: 10; /* Ensure it appears above other elements */
+}
+
+.selection-button {
+    padding: 20px 20px; /* Increase padding for larger buttons */
+    font-size: 1.5rem; /* Adjust font size for better visibility */
+    background:transparent;
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    /* background-color: #4CAF50; Green background */
+    border: 1px solid #ccc;
+    color: #ffffff; /* White text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Transition effect for hover */
+    opacity: 90%;
+}
+
+.selection-button:hover {
+    background-color: #024d03; /* Darker green on hover */
+}
+
+
+/* 
+
+---------------------------------------- DOCTOR LOCATOR PAGE ----------------------------------------
+
+*/
+
+/* Container for the coordinates input fields */
+.coordinates-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+  }
+  
+.form-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.form-field label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-field input {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.doctor-locator-container {
+    display: flex;
+    flex-direction: column;
+    font-family: monospace;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    max-width: 2000px; /* Limit the width of the form */
+    border: 1px solid #ccc;
+    padding: 20px; /* Padding inside the container */
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #242424;
+    margin-top: 30px; /* Margin to ensure it's not stuck to the top of the screen */
+    margin-bottom: 50px;
+}
+  
+  /* Optional: Adjust the map container responsiveness */
+@media (max-width: 768px) {
+    .coordinates-input-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-field input {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .doctor-locator-container {
+        padding: 10px;
+}
+}
+
+/* 
+
+---------------------------------------- PAST DIAGNOSES PAGE ----------------------------------------
+
+*/
+
+.past-diagnoses-container {
+    display: flex;
+    flex-direction: column;
+    font-family: monospace;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    max-width: 2000px; /* Limit the width of the form */
+    border: 1px solid #ccc;
+    padding: 20px; /* Padding inside the container */
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #242424;
+    margin-top: 30px; /* Margin to ensure it's not stuck to the top of the screen */
+    margin-bottom: 50px;
+}
+  
+
+.button-container {
+    font-family: monospace;
+    display: flex; /* Use Flexbox */
+    background:transparent;
+    justify-content: space-around; /* Distribute space evenly between buttons */
+    gap: 300px;
+    width: 100%; /* Make the container take full width */
+    margin: 20px; /* Add margin for spacing */
+}
+
+
+
+
+
+
 .user-button {
     position: absolute; /* Positioning to allow anchoring */
     top: 10px; /* Distance from the top */
     left: 10px; /* Distance from the left */
 }
+
+
 
 .form-container {
     display: flex;
@@ -119,6 +284,7 @@ body, html {
     font-family: monospace;
     align-items: center;
     justify-content: center;
+    position: relative;
     width: 100%;
     max-width: 2000px; /* Limit the width of the form */
     border: 1px solid #ccc;
@@ -136,10 +302,6 @@ body, html {
     justify-content: space-between; /* Space items evenly */
     gap: 10px;
     margin-bottom: 0px; /* Space between rows */
-}
-
-.form-container {
-    position: relative; /* Ensure the back button is positioned relative to this container */
 }
 
 .back-button {
@@ -209,7 +371,7 @@ textarea {
 } */
 
 /* Button styling */
-button {
+/* button {
     width: 100%;
     padding: 10px;
     background-color: #4CAF50;
@@ -222,7 +384,7 @@ button {
 
 button:hover {
     background-color: #024d03;
-}
+} */
 /* Add this to your existing styles.css */
 
 .app-container {
@@ -233,15 +395,7 @@ button:hover {
     height: 100vh; /* Make the container fill the viewport height */
 }
 
-.button-container {
-    font-family: monospace;
-    display: flex; /* Use Flexbox */
-    background:transparent;
-    justify-content: space-around; /* Distribute space evenly between buttons */
-    gap: 300px;
-    width: 100%; /* Make the container take full width */
-    margin: 20px; /* Add margin for spacing */
-}
+
 
 .toggle-button {
     padding: 30px 45px; /* Increase padding for larger buttons */

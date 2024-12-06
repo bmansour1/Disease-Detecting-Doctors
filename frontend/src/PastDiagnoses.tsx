@@ -44,16 +44,18 @@ export default function PastDiagnoses() {
         fetchDiagnoses();
     }, [user?.id]);
 
-    const handleBack = () => {
-        navigate('/');
-    };
-
     return (
         <div className="past-diagnoses-container">
             {/* Back Button */}
-            <button className="back-button" onClick={handleBack}>
+            <button className="back-button" onClick={() => navigate(-1)}>
                 {/* Back Arrow SVG */}
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                >
                     <path d="M19 12H5.83l5.88-5.88L10.29 5 2.29 12l8 7.29 1.42-1.42L5.83 12H19z" />
                 </svg>
             </button>

@@ -4,7 +4,7 @@ import './styles.css'; // Import styles if necessary
 
 const Title: React.FC = () => {
     const [title, setTitle] = useState<string>("< "); // Initial state with the opening bracket
-    const fullTitle: string = "         Welcome to Disease Detecting Doctors"; // The complete title text
+    const fullTitle: string = "                  Welcome to Disease Detecting Doctors"; // The complete title text
                               // ^^^^ fixme, spaces needed to not scramble the words "welcome"
     useEffect(() => {
         let index = 0; // Start index at 0
@@ -16,7 +16,7 @@ const Title: React.FC = () => {
             } else {
                 clearInterval(typingEffect); // Stop the interval when done
             }
-        }, 100); // Adjust typing speed here
+        }, 40); // Adjust typing speed here
 
         // Cleanup interval on unmount
         return () => clearInterval(typingEffect);

@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
+import requests
 from flask_cors import CORS  # To handle CORS issues
 from openai import OpenAI
 from firebase import *
@@ -8,6 +9,7 @@ from datetime import datetime
 
 load_dotenv() # Load OPEN_API_KEY from .env
 OPEN_API_KEY = os.getenv('OPEN_API_KEY')
+PLACES_API_KEY = os.getenv('PLACES_API_KEY')
 client = OpenAI(api_key=OPEN_API_KEY)
 
 app = Flask(__name__)
@@ -121,6 +123,51 @@ def add_chat(user_id):
         edit_user_chat(user_id, chat_log)
         
     return generate(), {"Content-Type": "text/plain"}
+
+@app.route('/api/user/doctors', methods=['POST'])
+def get_nearby_doctors():
+    # Extract latitude and longitude from the request data
+    data = request.get_json()
+    text_query = data["textQuery"]
+    latitude = data["latitude"]
+    longitude = data["longitude"]
+    
+    # Set up the request header and payload
+    url = "https://places.googleapis.com/v1/places:searchText"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": PLACES_API_KEY,
+        "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.priceLevel"
+    }
+    payload = {
+        "textQuery": text_query,
+        # You can add further parameters for more specific results
+        "locationBias": {
+           "circle": {
+               "center": {
+               "latitude": latitude,
+               "longitude": longitude
+               },
+               "radius": 500.0
+           }
+        },
+
+        # "includedType": "doctor",
+        
+        # "pageSize": 5
+    }
+    
+    # Perform the API request
+    response = requests.post(url, headers=headers, json=payload)
+
+    print(response.json())
+    
+    # Handle the API response
+    if response.status_code == 200:
+        return jsonify(response.json())
+    else:
+        return jsonify({"error": "Failed to fetch data"}), response.status_code
+
 
 @app.route('/api/user/chat/delete/<user_id>', methods=['DELETE'])
 def remove_user_chat(user_id):
