@@ -66,4 +66,6 @@ def delete_user_diagnosis(user_id, date_time):
 def delete_user_diagnosis_list(user_id):
     diagnosis_ref = db.collection('Diagnoses').document(user_id)
     diagnosis_ref.delete()
+
     return f"All diagnoses for user with ID {user_id} have been successfully deleted"
+  

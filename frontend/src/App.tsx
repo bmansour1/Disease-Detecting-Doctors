@@ -7,10 +7,14 @@ import InputForm from './input-form';
 import ChatBot from './chatbot';
 import DoctorLocator from './DoctorLocator';
 import PastDiagnoses from './PastDiagnoses';
+import Diagnosis from './Diagnosis';
+import DoctorLocations from './doctor-locations';
+import SelectionPage from './SelectionPage';
 
 export default function App() {
   return (
     <div className="app-container">
+      <div className="signin-button">
       <header>
         <SignedOut>
           <SignInButton />
@@ -19,13 +23,17 @@ export default function App() {
           <UserButton />
         </SignedIn>
       </header>
+      </div>
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/input-form" element={<InputForm />} />
-        <Route path="/chatbot" element={<ChatBot />} />
-        <Route path="/doctor-locator" element={<DoctorLocator />} />
-        <Route path="/past-diagnoses" element={<PastDiagnoses />} />
+        <Route path="/" element={<Home />} /> 
+        <Route path="/selection" element={<SelectionPage />} />
+        <Route path="/selection/input-form" element={<InputForm />} />
+        <Route path="/selection/chatbot" element={<ChatBot />} />
+        <Route path="/selection/doctor-locator" element={<DoctorLocator />} />
+        <Route path="/selection/past-diagnoses" element={<PastDiagnoses />} />
+        <Route path="/selection/diagnosis" element={<Diagnosis />} />
+        <Route path="/selection/doctor-locations" element={<DoctorLocations />} />
       </Routes>
     </div>
   );

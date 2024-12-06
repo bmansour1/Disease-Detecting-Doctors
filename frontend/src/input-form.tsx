@@ -56,9 +56,11 @@ export default function InputForm() {
             setSuccessMessage(response.data.message);
             
             // Optionally, navigate to PastDiagnoses page after a short delay
-            setTimeout(() => {
-                navigate('/past-diagnoses');
-            }, 2000); // 2 seconds delay to show success message
+
+            // setTimeout(() => {
+            //     navigate('/past-diagnoses');
+            // }, 2000); // 2 seconds delay to show success message
+          
         } catch (err) {
             console.error('Error submitting data:', err);
             setError('Failed to submit biometrics and generate diagnosis. Please try again.');
@@ -68,7 +70,7 @@ export default function InputForm() {
     };
 
     const handleBack = () => {
-        navigate('/');
+        navigate(-1);
     };
 
     return (
