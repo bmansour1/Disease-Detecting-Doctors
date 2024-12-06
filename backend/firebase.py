@@ -51,6 +51,7 @@ def get_user_diagnosis_list(user_id):
     diagnosis_list = [{"timestamp": k, **v} for k, v in diagnosis_dict.items()] # Extract dateTime and add it as a parameter; convert from a dict to a list
     return diagnosis_list
 
+
 def add_user_diagnosis(user_id, new_diagnosis):
     diagnosis_ref = db.collection('Diagnoses').document(user_id)
     diagnosis_ref.set(new_diagnosis, merge=True)

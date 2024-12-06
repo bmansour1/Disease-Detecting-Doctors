@@ -9,8 +9,8 @@ from datetime import datetime
 
 load_dotenv() # Load OPEN_API_KEY from .env
 OPEN_API_KEY = os.getenv('OPEN_API_KEY')
-PLACES_API_KEY = os.getenv('PLACES_API_KEY')
 client = OpenAI(api_key=OPEN_API_KEY)
+PLACES_API_KEY = os.getenv('PLACES_API_KEY')
 
 app = Flask(__name__)
 CORS(app)  # Allow requests from React frontend
@@ -51,14 +51,8 @@ def create_chat(user_id):
     user_input = request.get_json()
 
     prompt = f'''
-                I am an individual who is:
-                Gender: {user_biometrics["gender"]}
-                Race: {user_biometrics["race"]}
-                Age: {user_biometrics["age"]}
-                Height: {user_biometrics["height"]}
-                Weight: {user_biometrics["weight"]}
-                Blood Pressure: {user_biometrics["bloodPressure"]}
-                Allergies: {user_biometrics["allergies"]}
+                I am an individual with these biometrics:
+                {user_biometrics}.
                 {user_input["input"]}
             '''
 
@@ -124,6 +118,11 @@ def add_chat(user_id):
         
     return generate(), {"Content-Type": "text/plain"}
 
+@app.route('/api/user/chat/delete/<user_id>', methods=['DELETE'])
+def remove_chat(user_id):
+    result = delete_user_chat(user_id)
+    return jsonify({'message': result})
+
 @app.route('/api/user/doctors', methods=['POST'])
 def get_nearby_doctors():
     # Extract latitude and longitude from the request data
@@ -168,12 +167,6 @@ def get_nearby_doctors():
     else:
         return jsonify({"error": "Failed to fetch data"}), response.status_code
 
-
-@app.route('/api/user/chat/delete/<user_id>', methods=['DELETE'])
-def remove_user_chat(user_id):
-    result = delete_user_chat(user_id)
-    return jsonify({'message': result})
-
 @app.route('/api/user/diagnosis/get/<user_id>', methods=['GET']) 
 def get_diagnostic(user_id):
     date_time = request.get_json()["dateTime"]
@@ -185,19 +178,71 @@ def get_diagnostic_list(user_id):
     result = get_user_diagnosis_list(user_id)
     return jsonify(result)
 
-@app.route('/api/user/diagnosis/add/<user_id>', methods=['POST'])
+# @app.route('/api/user/diagnosis/add/<user_id>', methods=['POST'])
+# def add_diagnosis(user_id):
+#     # Get current datetime and convert to a string
+#     date_time = datetime.now()
+#     date_time_string = date_time.strftime('%Y-%m-%d %H:%M:%S')
+
+#     # Get new user diagnosis and save in datetime: diagnosis JSON format
+#     user_diagnosis = request.get_json()
+#     diagnosis_object = {
+#         date_time_string: user_diagnosis
+#     }
+#     result = add_user_diagnosis(user_id, diagnosis_object)
+#     return jsonify({'message': result})
+
+@app.route('/api/user/diagnosis/add/<user_id>', methods=['GET', 'POST'])
 def add_diagnosis(user_id):
+    user_biometrics = get_user_biometrics(user_id)
+
+    def generate(prompt):
+        stream = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{
+                    "role": "user", 
+                    "content": prompt
+                }]
+        )
+
+        response = stream.choices[0].message.content
+        return response
+
+    diag_prompt = f'''
+                I am an individual with these biometrics:
+                {user_biometrics}
+                Give me a diagnosis with a range of potential diseases, if possible.
+                Make note if the symptoms are not specific enough. If there are no symptoms,
+                provide a general disease risk outlook.
+            '''
+    diag_response = (generate(diag_prompt))
+
+    rec_prompt = f'''
+                I am an individual with these biometrics:
+                {user_biometrics}
+                and given this AI-generated diagnosis: {diag_response}.
+                Give me some recommendations on what course of action to take.
+            '''
+    rec_response = generate(rec_prompt)
+  
     # Get current datetime and convert to a string
     date_time = datetime.now()
     date_time_string = date_time.strftime('%Y-%m-%d %H:%M:%S')
 
-    # Get new user diagnosis and save in datetime: diagnosis JSON format
-    user_diagnosis = request.get_json()
     diagnosis_object = {
-        date_time_string: user_diagnosis
+        date_time_string: {
+            "biometrics": user_biometrics,
+            "diagnosis": diag_response,
+            "recommendations": rec_response
+        }
     }
-    result = add_user_diagnosis(user_id, diagnosis_object)
-    return jsonify({'message': result})
+    add_user_diagnosis(user_id, diagnosis_object)
+    return jsonify({
+        "biometrics": user_biometrics,
+        "diagnosis": diag_response,
+        "recommendations": rec_response,
+        "timestamp": date_time_string
+    })
 
 @app.route('/api/user/diagnosis/delete/<user_id>', methods=['DELETE'])
 def delete_diagnosis(user_id):
