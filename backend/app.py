@@ -159,7 +159,7 @@ def get_nearby_doctors():
     # Perform the API request
     response = requests.post(url, headers=headers, json=payload)
 
-    print(response.json())
+    # print(response.json())
     
     # Handle the API response
     if response.status_code == 200:

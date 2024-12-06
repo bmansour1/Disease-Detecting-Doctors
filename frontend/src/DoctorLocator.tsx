@@ -10,8 +10,8 @@ const mapContainerStyle = {
 };
 
 const defaultCenter = {
-  lat: 37.7749,
-  lng: -122.4194,
+  lat: 29.651634,
+  lng: -82.324829,
 };
 
 export default function DoctorLocator() {
