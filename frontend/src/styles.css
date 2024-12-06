@@ -170,22 +170,84 @@ body::before {
 */
 
 /* Container for the coordinates input fields */
+/* styles.css */
+.doctor-locator-container {
+    text-decoration-color: flex;
+    flex-direction: column;
+    font-family: monospace;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    /* max-width: 2000px; Limit the width of the form */
+    border: 1px solid #ccc;
+    /* padding: 20px; Padding inside the container */
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #242424;
+    margin-top: 30px; /* Margin to ensure it's not stuck to the top of the screen */
+    margin-bottom: 50px;
+    padding: 20px;
+    max-height: 100vh; /* Restrict height to the viewport */
+    overflow-y: auto; /* Enable vertical scrolling */
+    box-sizing: border-box;
+  }
+  
 .coordinates-input-container {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 20px 0;
-  }
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    text-align: center; /* Optional: center align text within child elements */
+}
+
+.doctor-list {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    overflow-y: auto;
+    max-height: 50vh; /* Restrict the height of the doctor list to half the viewport */
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.doctor-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.doctor-list li:last-child {
+    border-bottom: none;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
   
 .form-field {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically */
+    text-align: center; /* Center-align text in labels and inputs */
 }
 
 .form-field label {
     margin-bottom: 5px;
     font-weight: bold;
+    text-align: center; /* Optional: Ensure the label text is centered */
 }
 
 .form-field input {
@@ -193,25 +255,26 @@ body::before {
     width: 200px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    text-align: center; /* Optional: Center-align text inside the input */
 }
 
-.doctor-locator-container {
-    display: flex;
-    flex-direction: column;
-    font-family: monospace;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-    max-width: 2000px; /* Limit the width of the form */
-    border: 1px solid #ccc;
-    padding: 20px; /* Padding inside the container */
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #242424;
-    margin-top: 30px; /* Margin to ensure it's not stuck to the top of the screen */
-    margin-bottom: 50px;
+.submit-button {
+    display: block; /* Ensures it acts like a block element */
+    margin: 20px auto; /* Centers it horizontally within the parent */
+    padding: 10px 20px;
+    background-color: #007bff; /* Example background color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
 }
+
+.submit-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
   
   /* Optional: Adjust the map container responsiveness */
 @media (max-width: 768px) {

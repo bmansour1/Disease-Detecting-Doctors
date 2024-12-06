@@ -10,7 +10,7 @@ const mapContainerStyle = {
 };
 
 const defaultCenter = {
-  lat: 37.7749, // Default to San Francisco
+  lat: 37.7749,
   lng: -122.4194,
 };
 
@@ -19,8 +19,8 @@ export default function DoctorLocator() {
   const [latitude, setLatitude] = useState<number>(defaultCenter.lat);
   const [longitude, setLongitude] = useState<number>(defaultCenter.lng);
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>(defaultCenter);
-  const [doctors, setDoctors] = useState<any[]>([]); // Store doctors' information
-  const [error, setError] = useState<string | null>(null); // For error messages
+  const [doctors, setDoctors] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
   });
@@ -41,20 +41,31 @@ export default function DoctorLocator() {
     }
   };
 
+  const handleMapClick = (event: google.maps.MapMouseEvent) => {
+    const lat = event.latLng?.lat();
+    const lng = event.latLng?.lng();
+    if (lat !== undefined && lng !== undefined) {
+      setLatitude(lat);
+      setLongitude(lng);
+      setMapCenter({ lat, lng });
+    }
+  };
+
   const fetchDoctors = async () => {
     try {
-      setError(null); // Reset error
-      const response = await axios.post('/api/user/doctors', {
+      setError(null);
+      const response = await axios.post('http://127.0.0.1:5000/api/user/doctors', {
         textQuery: "Find doctors within the given parameters",
-        latitude: latitude,
-        longitude: longitude,
+        latitude,
+        longitude,
       });
-      
-      console.log('Backend response:', response.data); // Debugging
 
-      // Ensure the expected data structure
-      if (response.data && Array.isArray(response.data.results)) {
-        setDoctors(response.data.results);
+      if (response.data && Array.isArray(response.data.places)) {
+        const parsedDoctors = response.data.places.map((place: any) => ({
+          name: place.displayName?.text || 'Unknown Name',
+          address: place.formattedAddress || 'Unknown Address',
+        }));
+        setDoctors(parsedDoctors);
       } else {
         setDoctors([]);
         setError('Unexpected response format from backend.');
@@ -109,7 +120,12 @@ export default function DoctorLocator() {
         Find Doctors
       </button>
 
-      <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={mapCenter}>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={12}
+        center={mapCenter}
+        onClick={handleMapClick} // Add onClick handler
+      >
         <Marker position={mapCenter} />
       </GoogleMap>
 
@@ -122,8 +138,6 @@ export default function DoctorLocator() {
                 <strong>{doctor.name}</strong>
                 <br />
                 {doctor.address}
-                <br />
-                {doctor.phone && <span>Phone: {doctor.phone}</span>}
               </li>
             ))}
           </ul>
