@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUser } from '@clerk/clerk-react';
+import ReactMarkdown from 'react-markdown';
 import './styles.css';
 
 interface Diagnosis {
@@ -30,7 +31,7 @@ export default function PastDiagnoses() {
     useEffect(() => {
         const fetchDiagnoses = async () => {
             try {
-                const url = `http://127.0.0.1:5000/api/user/diagnoses/get/${user?.id}`;
+                const url = `http://127.0.0.1:5000/api/user/diagnosis-list/get/${user?.id}`;
                 const response = await axios.get(url);
                 setDiagnoses(response.data);
             } catch (err) {
@@ -49,7 +50,7 @@ export default function PastDiagnoses() {
     };
 
     return (
-        <div className="past-diagnoses-container">
+        <div className="diagnoses-container">
             {/* Back Button */}
             <button className="back-button" onClick={handleBack}>
                 {/* Back Arrow SVG */}
@@ -58,7 +59,7 @@ export default function PastDiagnoses() {
                 </svg>
             </button>
 
-            <h2>Past Diagnoses</h2>
+            <h2 className="diagnoses-header">Past Diagnoses</h2>
 
             {loading && <p>Loading your past diagnoses...</p>}
             {error && <p className="error-message">{error}</p>}
@@ -81,9 +82,9 @@ export default function PastDiagnoses() {
                                 <li><strong>Symptoms:</strong> {diag.biometrics.symptoms}</li>
                             </ul>
                             <h4>Diagnosis:</h4>
-                            <p>{diag.diagnosis}</p>
+                            <ReactMarkdown>{diag.diagnosis}</ReactMarkdown>
                             <h4>Recommendations:</h4>
-                            <p>{diag.recommendations}</p>
+                            <ReactMarkdown>{diag.recommendations}</ReactMarkdown>
                             <p className="disclaimer">
                                 Please do not blindly trust the information from our web app and consult a medical professional.
                             </p>

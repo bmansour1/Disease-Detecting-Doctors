@@ -54,6 +54,9 @@ export default function Home() {
           <Link to="/past-diagnoses">
             <button className="toggle-button">Past Diagnoses</button>
           </Link>
+          <Link to="/diagnosis">
+            <button className="toggle-button">Generate Diagnosis</button>
+          </Link>
         </div>
       )}
     </>

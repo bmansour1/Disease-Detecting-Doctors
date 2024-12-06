@@ -4,6 +4,7 @@ import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   sender: 'user' | 'AI';
