@@ -306,16 +306,16 @@ body::before {
     align-items: center;
     justify-content: center;
     position: relative;
-    width: 100%;
-    max-width: 2000px; /* Limit the width of the form */
+    width: 60%; /* Limit the width to 60% of the screen */
+    max-width: 1200px; /* Optional: Set a hard maximum width for larger screens */
     border: 1px solid #ccc;
     padding: 20px; /* Padding inside the container */
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     background-color: #242424;
-    margin-top: 30px; /* Margin to ensure it's not stuck to the top of the screen */
-    margin-bottom: 50px;
-}
+    margin: 30px auto 50px; /* Center the container horizontally and add spacing vertically */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+  }
   
 
 .button-container {
@@ -522,4 +522,45 @@ button:hover {
     justify-content: center;
     width: 900px;
     margin-top: 10px;
+}
+
+
+.diagnoses-container {
+    width: 100vw; 
+    height: 80vh;
+}
+
+.diagnoses-list {
+    margin: 15px auto; /* Center the list within the parent horizontally */
+    padding: 20px; /* Remove fixed horizontal padding to avoid excessive width */
+    border-radius: 5px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.06);
+    max-height: 80vh; /* Restrict height to 80% of the viewport */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    width: 90%; /* Take up 90% of the parent container's width */
+    box-sizing: border-box; /* Include padding and borders in width calculation */
+  }
+  
+
+.diagnosis-card {
+    padding: 10px;
+    margin-bottom: 100px;
+    border-radius: 5px;
+    border: 2px solid #e2e2e2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.disclaimer {
+    padding: 10px;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ffffff; 
+    border-radius: 5px;
+    margin-top: 10px;
+    font-style: italic;
+    font-size: 14px;
+}
+
+.diagnoses-header {
+    text-align: center;
 }

@@ -8,6 +8,7 @@ import InputForm from './input-form';
 import ChatBot from './chatbot';
 import DoctorLocator from './DoctorLocator';
 import PastDiagnoses from './PastDiagnoses';
+import Diagnosis from './Diagnosis';
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/chatbot" element={<ChatBot />} />
         <Route path="/doctor-locator" element={<DoctorLocator />} />
         <Route path="/past-diagnoses" element={<PastDiagnoses />} />
+        <Route path="/diagnosis" element={<Diagnosis />} />
       </Routes>
     </div>
   );
