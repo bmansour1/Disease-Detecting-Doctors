@@ -1,3 +1,4 @@
+{/*
 // Home.tsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -19,18 +20,16 @@ export default function Home() {
 
   return (
     <>
-      {/* Title with fade-out effect */}
       <div
         style={{
           opacity: titleOpacity,
           transition: 'opacity 0.5s ease-in-out',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
         <Title />
       </div>
 
-      {/* Show "Get Started" button only if not started */}
       {!isStarted && (
         <div className="button-container">
           <button className="toggle-button" onClick={handleGetStarted}>
@@ -39,7 +38,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Navigation buttons */}
       {isStarted && (
         <div className="button-container">
           <Link to="/input-form">
@@ -57,6 +55,48 @@ export default function Home() {
           <Link to="/diagnosis">
             <button className="toggle-button">Generate Diagnosis</button>
           </Link>
+        </div>
+      )}
+    </>
+  );
+}
+*/}
+
+// Home.tsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Use navigate hook
+import Title from './title';
+import './styles.css';
+
+export default function Home() {
+  const [isStarted, setIsStarted] = useState(false);
+  const [titleOpacity, setTitleOpacity] = useState(1);
+  const navigate = useNavigate(); // Initialize navigate
+
+  const handleGetStarted = () => {
+    setTitleOpacity(0);
+    setTimeout(() => {
+      setIsStarted(true);
+      navigate('/selection'); // Redirect to selection page
+    }, 500); // Match the CSS transition duration
+  };
+
+  return (
+    <>
+      <div
+        style={{
+          opacity: titleOpacity,
+          transition: 'opacity 0.5s ease-in-out',
+          textAlign: 'center',
+        }}
+      >
+        <Title />
+      </div>
+      {!isStarted && (
+        <div className="button-container">
+          <button className="toggle-button" onClick={handleGetStarted}>
+            Get Started
+          </button>
         </div>
       )}
     </>

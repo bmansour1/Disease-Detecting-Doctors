@@ -68,7 +68,7 @@ export default function InputForm() {
     };
 
     const handleBack = () => {
-        navigate('/');
+        navigate(-1);
     };
 
     return (

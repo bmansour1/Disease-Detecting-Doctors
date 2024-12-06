@@ -46,7 +46,7 @@ export default function PastDiagnoses() {
     }, [user?.id]);
 
     const handleBack = () => {
-        navigate('/');
+        navigate(-1);
     };
 
     return (
