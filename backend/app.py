@@ -123,35 +123,37 @@ def remove_chat(user_id):
     result = delete_user_chat(user_id)
     return jsonify({'message': result})
 
-@app.route('/api/user/doctors', methods=['POST'])
+@app.route('/api/user/doctors', methods=['GET', 'POST'])
 def get_nearby_doctors():
     # Extract text query from request data
     data = request.get_json()
     text_query = data["textQuery"]
+    lat = data["lat"]
+    lng = data["lng"]
     
     # Set up the request header and payload
     url = "https://places.googleapis.com/v1/places:searchText"
     headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": PLACES_API_KEY,
-        "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.priceLevel"
+        "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.rating,places.internationalPhoneNumber,places.userRatingCount,places.regularOpeningHours"                            
     }
     payload = {
-        "textQuery": text_query
-        # You can add further parameters for more specific results
-        # "locationBias": {
-        #    "circle": {
-        #        "center": {
-        #        "latitude": 37.7937,
-        #        "longitude": -122.3965
-        #        },
-        #        "radius": 500.0
-        #    }
-        # },
+        "textQuery": text_query,
+
+        "locationBias": {
+           "circle": {
+               "center": {
+               "latitude": lat,
+               "longitude": lng
+               },
+               "radius": 500
+           }
+        },
 
         # "includedType": "doctor",
         
-        # "pageSize": 5
+        "pageSize": 10
     }
     
     # Perform the API request
@@ -173,20 +175,6 @@ def get_diagnostic(user_id):
 def get_diagnostic_list(user_id):
     result = get_user_diagnosis_list(user_id)
     return jsonify(result)
-
-# @app.route('/api/user/diagnosis/add/<user_id>', methods=['POST'])
-# def add_diagnosis(user_id):
-#     # Get current datetime and convert to a string
-#     date_time = datetime.now()
-#     date_time_string = date_time.strftime('%Y-%m-%d %H:%M:%S')
-
-#     # Get new user diagnosis and save in datetime: diagnosis JSON format
-#     user_diagnosis = request.get_json()
-#     diagnosis_object = {
-#         date_time_string: user_diagnosis
-#     }
-#     result = add_user_diagnosis(user_id, diagnosis_object)
-#     return jsonify({'message': result})
 
 @app.route('/api/user/diagnosis/add/<user_id>', methods=['GET', 'POST'])
 def add_diagnosis(user_id):
@@ -217,7 +205,9 @@ def add_diagnosis(user_id):
                 I am an individual with these biometrics:
                 {user_biometrics}
                 and given this AI-generated diagnosis: {diag_response}.
-                Give me some recommendations on what course of action to take.
+                Give me some recommendations on what course of action to take,
+                like what type of doctor to visit or what preventative health
+                measures to take.
             '''
     rec_response = generate(rec_prompt)
   
