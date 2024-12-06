@@ -60,7 +60,7 @@ export default function PastDiagnoses() {
             </button>
 
             <h2 className="diagnoses-header">Past Diagnoses</h2>
-
+        
             {loading && <p>Loading your past diagnoses...</p>}
             {error && <p className="error-message">{error}</p>}
             {!loading && !error && diagnoses.length === 0 && <p>No past diagnoses found.</p>}

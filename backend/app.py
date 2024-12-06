@@ -165,12 +165,6 @@ def get_nearby_doctors():
     else:
         return jsonify({"error": "Failed to fetch data"}), response.status_code
 
-@app.route('/api/user/diagnosis/get/<user_id>', methods=['GET']) 
-def get_diagnostic(user_id):
-    date_time = request.get_json()["dateTime"]
-    result = get_user_diagnosis_list(user_id)[date_time]
-    return jsonify(result)
-
 @app.route('/api/user/diagnosis-list/get/<user_id>', methods=['GET']) 
 def get_diagnostic_list(user_id):
     result = get_user_diagnosis_list(user_id)
@@ -210,10 +204,6 @@ def add_diagnosis(user_id):
                 measures to take.
             '''
     rec_response = generate(rec_prompt)
-  
-    # Get current datetime and convert to a string
-    date_time = datetime.now()
-    date_time_string = date_time.strftime('%Y-%m-%d %H:%M:%S')
 
     diagnosis_object = {
         date_time_string: {
@@ -229,7 +219,7 @@ def add_diagnosis(user_id):
         "recommendations": rec_response,
         "timestamp": date_time_string
     })
-
+  
 @app.route('/api/user/diagnosis/delete/<user_id>', methods=['DELETE'])
 def delete_diagnosis(user_id):
     date_time = request.get_json()["dateTime"]
