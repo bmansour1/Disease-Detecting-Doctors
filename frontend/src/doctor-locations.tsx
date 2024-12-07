@@ -30,7 +30,7 @@ interface DoctorLocation {
     userRatingCount?: number;
 }
 
-export default function NearbyDoctors() {
+export default function DoctorLocations() {
     const navigate = useNavigate();
     const { state } = useLocation();
     const [locations, setLocations] = useState<DoctorLocation[]>([]);

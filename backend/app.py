@@ -85,11 +85,16 @@ def create_chat(user_id):
 
 @app.route('/api/user/chat/add/<user_id>', methods=['GET', 'PUT'])
 def add_chat(user_id):
+    user_biometrics = get_user_biometrics(user_id)
     # Grab the chat history from the chat log
     chat_log = get_user_chat(user_id)["log"]
     user_input = request.get_json()
 
-    prompt = f'{chat_log}\nUser: {user_input["input"]}'
+    prompt = f'''
+                Chat history:{chat_log}
+                My latest biometrics are: {user_biometrics}
+                User: {user_input["input"]}
+            '''
 
     def generate():
         # Create a stream to capture and output the AI's response
@@ -172,6 +177,9 @@ def get_diagnostic_list(user_id):
 
 @app.route('/api/user/diagnosis/add/<user_id>', methods=['GET', 'POST'])
 def add_diagnosis(user_id):
+    # Get current datetime and convert to a string
+    date_time = datetime.now()
+    date_time_string = date_time.strftime('%Y-%m-%d %H:%M:%S')
     user_biometrics = get_user_biometrics(user_id)
 
     def generate(prompt):
