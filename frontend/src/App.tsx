@@ -33,7 +33,7 @@ export default function App() {
         <Route path="/selection/doctor-locator" element={<DoctorLocator />} />
         <Route path="/selection/past-diagnoses" element={<PastDiagnoses />} />
         <Route path="/selection/diagnosis" element={<Diagnosis />} />
-        <Route path="/selection/doctor-locations" element={<DoctorLocations />} />
+        <Route path="/selection/doctor-locator/doctor-locations" element={<DoctorLocations />} />
       </Routes>
     </div>
   );

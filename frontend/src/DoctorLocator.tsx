@@ -83,7 +83,7 @@ export default function DoctorLocator() {
       const data = await response.json();
   
       // Use navigate to change route and send places data to the new component
-      navigate('/doctor-locations', { state: { places: data.places } });
+      navigate('doctor-locations', { state: { places: data.places } });
     } catch (error) {
       console.error('Failed to fetch places:', error);
     }
@@ -156,4 +156,4 @@ export default function DoctorLocator() {
   );
 }
 
-}
+
